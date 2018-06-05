@@ -12,6 +12,7 @@ pygame.init()
 
 size = width, height = 800, 600
 white = 255, 255, 255
+black = 0, 0, 0
 
 maxVelocity = 10
 numBirds = 50
@@ -129,7 +130,7 @@ class Bird:
 
 screen = pygame.display.set_mode(size)
 
-mybird = pygame.image.load("ball.jpg")
+mybird = pygame.image.load("bluebird2.png")
 mybird = pygame.transform.scale(mybird, (5, 5))
 mybirdrect = mybird.get_rect()
 
@@ -176,7 +177,7 @@ while 1:
 
         bird.move()
 
-    screen.fill(white)
+    screen.fill(black)
 
     for bird in birds:
         mybirdrect = pygame.Rect(mybirdrect)
