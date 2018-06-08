@@ -17,6 +17,8 @@ blue = 0, 0, 255
 light_blue = 0, 0, 200
 purple = 255, 0, 255
 greyish = 50, 50, 50
+green = 0, 255, 0
+light_green = 0, 200, 0
 
 maxVelocity = 10
 numBirds = 1
@@ -140,11 +142,11 @@ mybirdrect = mybird.get_rect()
 
 
 def text_objects(text, font):
-    textSurface = font.render(text, True, black)
+    textSurface = font.render(text, True, white)
     return textSurface, textSurface.get_rect()
 
 
-def button(msg, x, y, w, h, inactive_colour, active_colour, numBirds):
+def button(msg, x, y, w, h, inactive_colour, active_colour, numBirds, action):
     # mouse interaction |
     mouse = pygame.mouse.get_pos()
     print mouse
@@ -157,7 +159,13 @@ def button(msg, x, y, w, h, inactive_colour, active_colour, numBirds):
         pygame.draw.rect(screen, inactive_colour, (x, y, w, h))
 
         if click[0] == 1 and numBirds is not None:
-            birds.append(Bird(random.randint(0, width), random.randint(0, height)))
+
+            if action == "add":
+                birds.append(Bird(random.randint(0, width), random.randint(0, height)))
+            elif action == "remove":
+                if myBirdsNum > 0:
+                    birds.remove(bird)
+
             # numBirds += 1
             print "Yay!"
     else:
@@ -223,7 +231,10 @@ while 1:
         screen.blit(mybird, mybirdrect)
 
     # The adding more birds button -->
-    button("Birds", 25, 25, 88, 88, blue, light_blue, numBirds)
+    button("Birds", 25, 25, 88, 88, blue, light_blue, numBirds, "add")
+
+    # The goodbye birds button -->
+    button("Goodbye!", 150, 25, 118, 88, green, light_green, numBirds, "remove")
 
     # Counting how many birds there are -->
     myBirdsNum = 0
@@ -236,6 +247,7 @@ while 1:
     # The current amount of birds bubble -->
     pygame.draw.rect(screen, greyish, (500, 25, 250, 50))
 
+    # Adding the text
     smallText = pygame.font.Font("freesansbold.ttf", 10)
     ttextSurface, ttextRect = text_objects("Current amount of birds:", smallText)
     ttextRect.center = ((500 + (250 / 2)), (25 + (50 / 2)))
@@ -243,7 +255,7 @@ while 1:
 
     # The actual quantity -->
     smallText = pygame.font.Font("freesansbold.ttf", 11)
-    stextSurface, stextRect = text_objects("\n".format(myBirdsNum), smallText)
+    stextSurface, stextRect = text_objects("{0}".format(myBirdsNum), smallText)
     stextRect.center = ((700 + (50 / 2)), (25 + (50 / 2)))
     screen.blit(stextSurface, stextRect)
 
