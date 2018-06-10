@@ -149,10 +149,10 @@ def text_objects(text, font):
 def button(msg, x, y, w, h, inactive_colour, active_colour, numBirds, action):
     # mouse interaction |
     mouse = pygame.mouse.get_pos()
-    print mouse
+    # print mouse
 
     click = pygame.mouse.get_pressed()
-    print click
+    # print click
 
     # if x + width > mouse[x] > x and y + height > mouse[y] > y:
     if x + w > mouse[0] > x and y + h > mouse[1] > y:
@@ -167,7 +167,7 @@ def button(msg, x, y, w, h, inactive_colour, active_colour, numBirds, action):
                     birds.remove(bird)
 
             # numBirds += 1
-            print "Yay!"
+            # print "Yay!"
     else:
         pygame.draw.rect(screen, active_colour, (x, y, w, h))
 
@@ -242,7 +242,7 @@ while 1:
     for i in birds:
         myBirdsNum += 1
 
-    print myBirdsNum
+    # print myBirdsNum
 
     # The current amount of birds bubble -->
     pygame.draw.rect(screen, greyish, (500, 25, 250, 50))
