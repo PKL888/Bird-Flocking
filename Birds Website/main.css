@@ -1,0 +1,41 @@
+html {
+    background-color: lightblue;
+    font-family: cursive;
+    text-align: center;
+    color: darkblue;
+}
+
+#bird1 {
+    height: 100px;
+    width: 300px;
+    padding: 10px;
+    margin: 3px;
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
+button {
+    font-family: cursive;
+    text-align: center;
+    color: darkblue;
+}
+
+#button1, #button3 {
+    background-color: mediumpurple;
+}
+
+#button2 {
+    background-color: darkturquoise;
+}
+
+#button4 {
+    background-color: seagreen;
+}
+
+#button5 {
+    background-color: indianred;
+}
+
+#button6 {
+    background-color: yellow;
+}

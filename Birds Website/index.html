@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" type="text/css" href="main.css" />
+
+<head>
+
+    <title>Birds Flocking 🐦🐢🐳</title>
+
+    <h1>Birds Flocking</h1>
+    <h3>By Peleg Kark-Levin</h3>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            
+            <!-- Initial positions and sizes (for the div) -->
+            $("#bird1").parent().css({
+                position: 'relative'
+            });
+
+            $("#bird1").css({
+                top: 50,
+                left: 200,
+                position: 'absolute'
+            });
+
+            <!-- Get size button -->
+            $("#button1").click(function() {
+                var txt = "";
+                txt += "Width: " + $("#bird1").width() + "</br>";
+                txt += "Height: " + $("#bird1").height();
+                $("#bird1").html(txt);
+            });
+
+            var width = 100;
+            var height = 60;
+
+            <!-- Resize div button --> 
+            $("#button2").click(function() {
+                $("#bird1").width(width).height(height);
+
+                width += 18;
+                height += 18;
+            });
+
+            <!-- Get pos button -->
+            $("#button3").click(function() {
+                var x = $("#bird1").position();
+                alert("Top: " + x.top + " Left: " + x.left);
+            });
+
+            x = $("#bird1").position();
+            var currentLeft = x.left();
+            
+            <!-- Left button -->
+            $("#button4").click(function() {
+                currentLeft += 108;
+
+                $("#bird1").css({
+                    top: currentTop,
+                    left: currentLeft,
+                    position: 'absolute'
+                });
+            });
+            
+            <!-- Get right button -->
+            $("#button5").click(function() {
+                currentLeft += 108;
+
+                $("#bird1").css({
+                    top: currentTop,
+                    left: currentLeft,
+                    position: 'absolute'
+                });
+            });
+            
+            <!-- Toggle button -->
+            $("#button6").click(function() {
+                $("#bird1").toggle();
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <br><br>
+    <h5>Program...</h5>
+
+    <div class="main_window">
+
+        <button id="button4">Left</button>
+        <button id="button1">Get size</button>
+        <button id="button2">Resize div</button>
+        <button id="button3">Get pos.</button>
+        <button id="button5">Right</button>
+        <button id="button6">Toggle</button>
+
+        <div id="bird1">
+            <img src="mybird.png">
+        </div>
+
+    </div>
+
+</body>
+
+</html>
