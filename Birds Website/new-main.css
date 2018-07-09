@@ -1,0 +1,24 @@
+html {
+    background-color: lightblue;
+    font-family: cursive;
+    text-align: center;
+    color: darkblue;
+}
+
+.main-window {
+    width: 600px;
+    height: 300px;
+    background: white;
+    padding: 10px;
+    margin: 10px;
+    position: absolute;
+    overflow: hidden;
+}
+
+.moving-bird {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background-image: url("mybird.png");
+    background-size: contain;
+}

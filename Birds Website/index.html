@@ -14,7 +14,7 @@
 
     <script>
         $(document).ready(function() {
-            
+
             <!-- Initial positions and sizes (for the div) -->
             $("#bird1").parent().css({
                 position: 'relative'
@@ -27,7 +27,7 @@
             });
 
             <!-- Get size button -->
-            $("#button1").click(function() {
+            $("#btn-get-size").click(function() {
                 var txt = "";
                 txt += "Width: " + $("#bird1").width() + "</br>";
                 txt += "Height: " + $("#bird1").height();
@@ -38,7 +38,7 @@
             var height = 60;
 
             <!-- Resize div button --> 
-            $("#button2").click(function() {
+            $("#btn-resize").click(function() {
                 $("#bird1").width(width).height(height);
 
                 width += 18;
@@ -46,41 +46,67 @@
             });
 
             <!-- Get pos button -->
-            $("#button3").click(function() {
+            $("#btn-get-pos").click(function() {
                 var x = $("#bird1").position();
                 alert("Top: " + x.top + " Left: " + x.left);
             });
 
             x = $("#bird1").position();
-            var currentLeft = x.left();
-            
+            var currentLeft = x.left;
+
             <!-- Left button -->
-            $("#button4").click(function() {
-                currentLeft += 108;
+            $("#btn-left").click(function() {
+                currentLeft -= 18;
 
                 $("#bird1").css({
-                    top: currentTop,
                     left: currentLeft,
                     position: 'absolute'
                 });
             });
-            
-            <!-- Get right button -->
-            $("#button5").click(function() {
-                currentLeft += 108;
+
+            <!-- Right button -->
+            $("#btn-right").click(function() {
+                currentLeft += 18;
 
                 $("#bird1").css({
-                    top: currentTop,
                     left: currentLeft,
                     position: 'absolute'
                 });
             });
-            
+
             <!-- Toggle button -->
-            $("#button6").click(function() {
+            $("#btn-toggle").click(function() {
                 $("#bird1").toggle();
             });
+
+            y = $("#bird1").position();
+            var currentTop = y.top;
+
+            <!-- Down button -->
+            $("#btn-down").click(function() {
+                currentTop += 18;
+
+                $("#bird1").css({
+                    top: currentTop,
+                    position: 'absolute'
+                });
+            });
+
+            <!-- Up button -->
+            $("#btn-up").click(function() {
+                currentTop -= 18;
+
+                $("#bird1").css({
+                    top: currentTop,
+                    position: 'absolute'
+                });
+            });
+
+            document.onkeypress = function(myEvent) { // doesn't have to be "e"
+                console.log(myEvent.which);
+            };
         });
+
     </script>
 
 </head>
@@ -92,14 +118,16 @@
 
     <div class="main_window">
 
-        <button id="button4">Left</button>
-        <button id="button1">Get size</button>
-        <button id="button2">Resize div</button>
-        <button id="button3">Get pos.</button>
-        <button id="button5">Right</button>
-        <button id="button6">Toggle</button>
+        <button id="btn-down">Down</button>
+        <button id="btn-left">Left</button>
+        <button id="btn-get-size">Get size</button>
+        <button id="btn-resize">Resize div</button>
+        <button id="btn-get-pos">Get pos.</button>
+        <button id="btn-right">Right</button>
+        <button id="btn-up">Up</button>
+        <button id="btn-toggle">Toggle</button>
 
-        <div id="bird1">
+        <div id="bird1" data-x="30" data-y="40">
             <img src="mybird.png">
         </div>
 

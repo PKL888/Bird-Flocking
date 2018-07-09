@@ -12,6 +12,7 @@ html {
     margin: 3px;
     border: 1px solid blue;
     background-color: lightblue;
+    background-image: url(mybird.png);
 }
 
 button {
@@ -20,22 +21,25 @@ button {
     color: darkblue;
 }
 
-#button1, #button3 {
+#btn-get-size,
+#btn-get-pos {
     background-color: mediumpurple;
 }
 
-#button2 {
+#btn-resize {
     background-color: darkturquoise;
 }
 
-#button4 {
+#btn-left,
+#btn-down {
     background-color: seagreen;
 }
 
-#button5 {
+#btn-right,
+#btn-up {
     background-color: indianred;
 }
 
-#button6 {
+#btn-toggle {
     background-color: yellow;
 }

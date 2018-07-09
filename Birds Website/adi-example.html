@@ -1,0 +1,155 @@
+<html>
+
+
+
+<head>
+
+    <title>jQuery data example</title>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script type="text/javascript">
+        function update_position(obj) {
+
+            data = $(obj).data();
+
+            $(obj).css({
+                left: "" + data.x + "px",
+                bottom: "" + data.y + "px"
+            });
+
+        }
+
+        function set_flag_state(index, state) {
+
+            $("#flag" + index).data(state).trigger("state_changed");
+
+        }
+
+        function get_flag_state(index) {
+
+            return $("#flag" + index).data();
+
+        }
+
+        function clip_to_limits(x, min_value, max_value) {
+
+            return (max_value - min_value + x - min_value) % (max_value - min_value) + min_value;
+
+        }
+
+        function move_flag(index, steps) {
+
+            cur_state = get_flag_state(index);
+
+            x = clip_to_limits(cur_state.x + steps.dx, -50, 450);
+
+            y = clip_to_limits(cur_state.y + steps.dy, -50, 450);
+
+            set_flag_state(index, {
+                x: x,
+                y: y
+            });
+
+        }
+
+        $(document).ready(function() {
+
+            $(".moving-object").on("state_changed", function(event) {
+
+                update_position(event.target);
+
+            });
+
+            set_flag_state(1, {
+                x: 0,
+                y: 0
+            });
+
+            set_flag_state(2, {
+                x: 100,
+                y: 100
+            });
+
+            setInterval(function() {
+
+                move_flag(1, {
+                    dx: 1,
+                    dy: -2
+                });
+
+                move_flag(2, {
+                    dx: -3,
+                    dy: -1
+                });
+
+            }, 10);
+
+        });
+
+    </script>
+
+    <style>
+        body {
+
+            background: #eeeeee;
+
+        }
+
+
+
+        .container {
+
+            width: 400px;
+
+            height: 400px;
+
+            background: white;
+
+            padding: 10px;
+
+            margin: 10px;
+
+            position: absolute;
+
+            overflow: hidden;
+
+        }
+
+
+
+        .moving-object {
+
+            width: 50px;
+
+            height: 50px;
+
+            position: absolute;
+
+            background-image: url("australia.jpg");
+
+            background-size: contain;
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+    <div class="container">
+
+        <div id="flag1" class="moving-object"></div>
+
+        <div id="flag2" class="moving-object"></div>
+
+    </div>
+
+</body>
+
+
+
+</html>

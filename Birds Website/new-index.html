@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" type="text/css" href="new-main.css" />
+
+<head>
+
+    <title>Birds Flocking 🐦🐢🐳</title>
+
+    <h1>Birds Flocking</h1>
+    <h3>By Peleg Kark-Levin</h3>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        function update_position(obj) {
+            data = $(obj).data();
+
+            $(obj).css({
+                left: "" + data.x + "px",
+                top: "" + data.y + "px"
+            });
+        }
+
+        function set_bird_state(index_num, state) {
+            $("#bird" + index_num).data(state).trigger("bird_state_changed");
+        }
+
+        function get_bird_state(index_num) {
+            return $("#bird" + index_num).data();
+        }
+
+        function clip_to_limits(i, min_value, max_value) {
+            return (max_value - min_value + i - min_value) % (max_value - min_value) + min_value;
+        }
+
+        function move_bird(index_num, steps) {
+            current_state = get_bird_state(index_num);
+
+            x = clip_to_limits(current_state.x + steps.dx, -50, 650);
+            y = clip_to_limits(current_state.y + steps.dy, -50, 350);
+
+            set_bird_state(index_num, {
+                x: x,
+                y: y
+            });
+        }
+
+        var maxVelocity = 10;
+        var numBirds = 50;
+        var birds = [];
+
+        class Bird {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.velocityX = random.randint(1, 10) / 10.0;
+                this.velocityY = random.randint(1, 10) / 10.0;
+            }
+
+            distance(bird) {
+                var distX = this.x - bird.x;
+                var distY = this.y - bird.y;
+
+                return math.sqrt((distX ** 2) + (distY ** 2));
+            }
+
+            // Rule 1: Seperation - steer to avoid crowding local flockmates
+            seperate(birds, minDistanceBetweenBirds) {
+                if (birds.length < 1) {
+                    return;
+                }
+
+                var distanceX = 0;
+                var distanceY = 0;
+                var closerBirds = 0;
+
+                for (bird in birds) {
+                    distance = this.distance(bird);
+
+                    if (distance < minDistanceBetweenBirds) {
+                        closerBirds += 1;
+
+                        var xDiff = (this.x - bird.x);
+                        var yDiff = (this.y - bird.y);
+
+                        if (xDiff >= 0) {
+                            xDiff = math.sqrt(minDistanceBetweenBirds) - xDiff;
+                        } else if (xDiff < 0) {
+                            xDiff = -math.sqrt(minDistanceBetweenBirds) - xDiff;
+                        }
+
+                        if (yDiff >= 0) {
+                            yDiff = math.sqrt(minDistanceBetweenBirds) - yDiff;
+                        } else if (yDiff < 0) {
+                            yDiff = -math.sqrt(minDistanceBetweenBirds) - yDiff;
+                        }
+
+                        distanceX += xDiff;
+                        distanceY += yDiff;
+                    }
+                }
+
+                if (closerBirds == 0) {
+                    return;
+                }
+
+                this.velocityX -= distanceX / 5;
+                this.velocityY -= distanceY / 5;
+            }
+
+            // Rule 2: Alignment - steer towards the average heading of local flockmates
+            alignment(birds) {
+                if (birds.length < 1) {
+                    return;
+                }
+
+                // calculate the average velocities of other birds
+                var avgdX = 0;
+                var avgdY = 0;
+
+                for (bird in birds) {
+                    avgdX += bird.velocityX;
+                    avgdY += bird.velocityY;
+                }
+
+                avgdX /= birds.length;
+                avgdY /= birds.length;
+
+                // set our velocity towards others
+                this.velocityX += (avgdX / 40);
+                this.velocityY += (avgdY / 40);
+            }
+
+            // Rule 3: Cohesion - steer toward the average position of local flockmates
+            cohesion(birds) {
+                if (birds.length < 1) {
+                    return;
+                }
+
+                // calculate the average distance from the other birds in the flock...
+                var avgvX = 0;
+                var avgvY = 0;
+
+                for (bird in birds) {
+                    if (bird.x == this.x && bird.y == this.y) {
+                        continue;
+                    }
+
+                    avgvX += (this.x - bird.x);
+                    avgvY += (this.y - bird.y);
+                }
+
+                avgvX /= birds.length; // arithmetical operation
+                avgvY /= birds.length; /// of average taking calc
+
+                // set velocity in comparison to the others
+                var distance = -math.sqrt((avgvX ** 2) + (avgvY ** 2));
+
+                this.velocityX -= (avgvX / 100);
+                this.velocityY -= (avgvY / 100);
+            }
+
+            move() {
+                if (abs(this.velocityX > maxVelocity || abs(this.velocityY >
+                        maxVelocity))) {
+                    scalingFactor = maxVelocity / max(abs(this.velocityX),
+                        abs(this.velocityY));
+                    this.velocityX *= scalingFactor;
+                    this.velocityY *= scalingFactor;
+                }
+
+                this.x += this.velocityX;
+                this.y += this.velocityY;
+            }
+        }
+
+        // create the birds in random positions
+        for (i in numBirds.length) {
+            birds.append(Bird(random.randint(0, width), random.randint(0, height)));
+        }
+
+        while (1) {
+            for (bird in birds) {
+                var closerBirds = [];
+
+                for (otherBird in birds) {
+                    if (otherBird == bird) {
+                        continue;
+                    }
+
+                    var distance = bird.distance(otherBird);
+
+                    if (distance < 200) {
+                        closerBirds.append(otherBird);
+                    }
+                }
+
+                bird.cohesion(closerBirds);
+                bird.alignment(closerBirds);
+                bird.seperate(closerBirds, 20);
+
+                // ensure birds stay within the screen
+                // if they rebound they lose some of their velocity
+                var border = 25;
+
+                if (bird.x < border && bird.velocityX < 0) {
+                    bird.velocityX = -bird.velocityX * random.random();
+                }
+
+                if (bird.x > width - border && bird.velocityX > 0) {
+                    bird.velocityX = -bird.velocityX * random.random();
+                }
+
+                if (bird.y < border && bird.velocityY < 0) {
+                    bird.velocityY = -bird.velocityY * random.random();
+                }
+
+                if (bird.y > height - border && bird.velocityY > 0) {
+                    bird.velocityY = -bird.velocityY * random.random();
+                }
+
+                bird.move();
+            }
+        }
+
+        $(document).ready(function() {
+            $(".moving-bird").on("bird_state_changed", function(event) {
+                update_position(event.target);
+            });
+
+            set_bird_state(1, {
+                x: 0,
+                y: 0
+            });
+
+            set_bird_state(2, {
+                x: 100,
+                y: 100
+            });
+
+            set_bird_state(3, {
+                x: 50,
+                y: 70
+            });
+
+            setInterval(function() {
+                move_bird(1, {
+                    dx: 1,
+                    dy: 1
+                });
+
+                move_bird(2, {
+                    dx: -3,
+                    dy: 2
+                });
+
+                move_bird(3, {
+                    dx: 4,
+                    dy: -1
+                });
+            }, 10)
+        });
+
+    </script>
+
+</head>
+
+<body>
+
+    <br><br>
+    <h5>Program...</h5>
+
+    <div class="main-window">
+
+        <div id="bird1" class="moving-bird"></div>
+        <div id="bird2" class="moving-bird"></div>
+        <div id="bird3" class="moving-bird"></div>
+
+    </div>
+
+</body>
+
+</html>
