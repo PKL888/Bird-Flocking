@@ -1,4 +1,4 @@
-    # Bird Floncking Movement by Peleg Kark-Levin
+# Bird Flocking Movement by Peleg Kark-Levin
 # Boids...
 
 
